@@ -20,6 +20,9 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(product: ProductEntity)
 
+    @Update
+    suspend fun updateProduct(product: ProductEntity)
+
     @Delete
     suspend fun deleteProduct(product: ProductEntity)
 

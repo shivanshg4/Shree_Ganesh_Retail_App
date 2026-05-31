@@ -44,6 +44,19 @@ class POSRepository(
         )
     }
     
+    suspend fun updateProduct(product: Product) {
+        productDao.updateProduct(
+            ProductEntity(
+                id = product.id,
+                name = product.name,
+                price = product.price,
+                categoryId = product.categoryId,
+                imageUrl = product.imageUrl,
+                stockQuantity = product.stockQuantity
+            )
+        )
+    }
+
     suspend fun addCategory(category: Category) {
         categoryDao.insertCategory(CategoryEntity(category.id, category.name, category.color))
     }
