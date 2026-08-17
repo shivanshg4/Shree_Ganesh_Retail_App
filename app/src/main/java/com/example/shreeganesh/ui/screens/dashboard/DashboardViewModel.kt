@@ -22,12 +22,22 @@ class DashboardViewModel @Inject constructor(
         repository.getRevenueForToday(),
         repository.getTransactionCountForToday(),
         repository.getLowStockCount(),
-        authRepository.currentUser
-    ) { revenue, count, lowStock, user ->
+        authRepository.currentUser,
+        repository.allTransactions
+    ) { revenue, count, lowStock, user, transactions ->
+        val calendar = java.util.Calendar.getInstance()
+        val now = calendar.timeInMillis
+        calendar.add(java.util.Calendar.DAY_OF_YEAR, -30)
+        val monthStart = calendar.timeInMillis
+
+        val monthlySales = transactions
+            .filter { it.transaction.timestamp in monthStart..now }
+            .sumOf { it.transaction.totalAmount }
+
         DashboardUiState(
             metrics = DashboardMetrics(
                 dailySales = revenue ?: 0.0,
-                monthlySales = 0.0,
+                monthlySales = monthlySales,
                 ordersCount = count,
                 lowStockCount = lowStock
             ),
