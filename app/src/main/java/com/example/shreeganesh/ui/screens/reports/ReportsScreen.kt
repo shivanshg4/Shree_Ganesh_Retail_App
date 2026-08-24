@@ -79,9 +79,21 @@ fun ReportsScreen(
                         // Left Column: Metrics and Chart
                         Column(modifier = Modifier.weight(1.2f).fillMaxHeight()) {
                             Row(horizontalArrangement = Arrangement.spacedBy(spacing.medium)) {
+                                val revenueTitle = when (uiState.selectedPeriod) {
+                                    ReportPeriod.DAILY -> "Today's Revenue"
+                                    ReportPeriod.WEEKLY -> "This Week's Revenue"
+                                    ReportPeriod.MONTHLY -> "This Month's Revenue"
+                                    ReportPeriod.YEARLY -> "This Year's Revenue"
+                                }
+                                val revenueValue = when (uiState.selectedPeriod) {
+                                    ReportPeriod.DAILY -> uiState.report.dailyRevenue
+                                    ReportPeriod.WEEKLY -> uiState.report.weeklyRevenue
+                                    ReportPeriod.MONTHLY -> uiState.report.monthlyRevenue
+                                    ReportPeriod.YEARLY -> uiState.report.yearlyRevenue
+                                }
                                 ReportMetricCard(
-                                    title = "Today's Revenue",
-                                    value = "₹%.2f".format(uiState.report.dailyRevenue),
+                                    title = revenueTitle,
+                                    value = "₹%.2f".format(revenueValue),
                                     icon = Icons.AutoMirrored.Filled.TrendingUp,
                                     modifier = Modifier.weight(1f)
                                 )
@@ -142,9 +154,21 @@ fun ReportsScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(spacing.medium)
                             ) {
+                                val revenueTitle = when (uiState.selectedPeriod) {
+                                    ReportPeriod.DAILY -> "Today's Revenue"
+                                    ReportPeriod.WEEKLY -> "This Week's Revenue"
+                                    ReportPeriod.MONTHLY -> "This Month's Revenue"
+                                    ReportPeriod.YEARLY -> "This Year's Revenue"
+                                }
+                                val revenueValue = when (uiState.selectedPeriod) {
+                                    ReportPeriod.DAILY -> uiState.report.dailyRevenue
+                                    ReportPeriod.WEEKLY -> uiState.report.weeklyRevenue
+                                    ReportPeriod.MONTHLY -> uiState.report.monthlyRevenue
+                                    ReportPeriod.YEARLY -> uiState.report.yearlyRevenue
+                                }
                                 ReportMetricCard(
-                                    title = "Today's Revenue",
-                                    value = "₹%.2f".format(uiState.report.dailyRevenue),
+                                    title = revenueTitle,
+                                    value = "₹%.2f".format(revenueValue),
                                     icon = Icons.AutoMirrored.Filled.TrendingUp,
                                     modifier = Modifier.weight(1f)
                                 )
@@ -209,8 +233,10 @@ fun RevenueChart(
         shape = MaterialTheme.shapes.large
     ) {
         Column(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+            // Since we can't easily pass the period to the chart down here cleanly without changing signature,
+            // we will let the chart title be generic.
             Text(
-                "Revenue (Last 7 Days)",
+                "Revenue Report",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.medium)
