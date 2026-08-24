@@ -41,12 +41,13 @@ data class SalesReport(
     val dailyRevenue: Double,
     val weeklyRevenue: Double,
     val monthlyRevenue: Double,
+    val yearlyRevenue: Double,
     val transactionCount: Int
 )
 
 @Immutable
 enum class ReportPeriod {
-    DAILY, WEEKLY, MONTHLY
+    DAILY, WEEKLY, MONTHLY, YEARLY
 }
 
 @Immutable

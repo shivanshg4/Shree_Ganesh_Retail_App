@@ -71,8 +71,8 @@ fun ProductManagementScreen(
                             onConfirm = { name, price, catId, stock ->
                                 if (showAddDialog) {
                                     viewModel.addProduct(name, price, catId, stock)
-                                } else {
-                                    // viewModel.updateProduct(...)
+                                } else if (editingProduct != null) {
+                                    viewModel.updateProduct(editingProduct!!.id, name, price, catId, stock, editingProduct!!.imageUrl)
                                 }
                                 showAddDialog = false
                                 editingProduct = null
@@ -94,6 +94,18 @@ fun ProductManagementScreen(
                 onConfirm = { name, price, catId, stock ->
                     viewModel.addProduct(name, price, catId, stock)
                     showAddDialog = false
+                }
+            )
+        }
+
+        if (!isTablet && editingProduct != null) {
+            EditProductDialog(
+                product = editingProduct!!,
+                categories = uiState.categories,
+                onDismiss = { editingProduct = null },
+                onConfirm = { name, price, catId, stock ->
+                    viewModel.updateProduct(editingProduct!!.id, name, price, catId, stock, editingProduct!!.imageUrl)
+                    editingProduct = null
                 }
             )
         }
@@ -340,6 +352,24 @@ fun AddProductDialog(
         title = { Text("Add New Product") },
         text = {
             ProductForm(product = null, categories = categories, onDismiss = onDismiss, onConfirm = onConfirm)
+        },
+        confirmButton = {},
+        dismissButton = {}
+    )
+}
+
+@Composable
+fun EditProductDialog(
+    product: Product,
+    categories: List<com.example.shreeganesh.domain.models.Category>,
+    onDismiss: () -> Unit,
+    onConfirm: (String, Double, String?, Int) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit Product") },
+        text = {
+            ProductForm(product = product, categories = categories, onDismiss = onDismiss, onConfirm = onConfirm)
         },
         confirmButton = {},
         dismissButton = {}

@@ -54,6 +54,20 @@ class ProductManagementViewModel @Inject constructor(
         }
     }
 
+    fun updateProduct(id: String, name: String, price: Double, categoryId: String?, stockQuantity: Int, imageUrl: String? = null) {
+        viewModelScope.launch {
+            val product = Product(
+                id = id,
+                name = name,
+                price = price,
+                categoryId = categoryId,
+                stockQuantity = stockQuantity,
+                imageUrl = imageUrl
+            )
+            repository.updateProduct(product)
+        }
+    }
+
     fun addCategory(name: String) {
         viewModelScope.launch {
             val category = Category(
